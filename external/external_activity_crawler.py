@@ -25,8 +25,8 @@ def crawl_and_publish_to_rabbitmq():
     description = re.search(r'description: "(.*?)"', content).group(1)
 
     # RabbitMQ 연결 설정
-    credentials = pika.PlainCredentials('guest', 'guest') # 여기서 앞 guest(=rabbitmq 서버의 userID), 뒤 guest(=rabbitmq 서버의 password)는 가려주셔야 합니다!
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='34.22.83.224', port=5672, credentials=credentials)) # host IP는 테스트용 ip라서 나중에 변경될 수 있으므로 환경변수로 처리해야 할 것 같아요!
+    credentials = pika.PlainCredentials(os.getenv('RABBITMQ_USER'), os.getenv('RABBITMQ_PASSWORD'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=os.getenv('RABBITMQ_HOST'), port=5672, credentials=credentials)) 
     channel = connection.channel()
     # 큐를 durable=True로 선언
     channel.queue_declare(queue='external_act_queue', durable=True)

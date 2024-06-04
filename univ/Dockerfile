@@ -13,4 +13,4 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 필요한 경우, 실행할 스크립트를 지정
-CMD ["python", "external_activity_crawler.py"]
+CMD ["python", "univ_activity_crawler.py"]
