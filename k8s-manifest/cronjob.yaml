@@ -1,1 +1,66 @@
-# msa-crawling-external Cronjob
+# msa-crawling Cronjob
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: msa-crawling-external
+spec:
+  schedule: "0 8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: msa-crawling-external
+            image: hyezis/msa-crawling-external:latest
+            env:
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-host
+            - name: RABBITMQ_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-user
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-password
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: regcred  
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: msa-crawling-univ
+spec:
+  schedule: "0 8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: msa-crawling-univ
+            image: hyezis/msa-crawling-univ:latest
+            env:
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-host
+            - name: RABBITMQ_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-user
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-password
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: regcred
